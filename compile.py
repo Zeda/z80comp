@@ -21,13 +21,12 @@ class Node:
     self.parents=[]
     self.children=[]
   def addparent(self,node):
-    node.addhild(self)
+    node.addchild(self)
     return self
   def addchild(self,node):
-    if node not in self.children:
-      self.children=[node]+self.children
-      if self not in node.parents:
-        node.parents+=[self]
+    self.children=[node]+self.children
+    if self not in node.parents:
+      node.parents+=[self]
     return self
   def child(self,n):
     if n>=len(self.children):
@@ -114,6 +113,19 @@ def getglue(o,i):
   if o==i:
     return ['',0,0,'']
   reg8=['B','C','D','E','H','L','(hl)','A','IXH','IXL']
+
+  if i=="H" or i=="L":
+    s="HL"
+  elif i=="D" or i=="E":
+    s="DE"
+  elif i=="B" or i=="C":
+    s="BC"
+  elif i=="IXH" or i=="IXL":
+    s="IX"
+  elif i=="A":
+    s="AF"
+
+
   if o.endswith("HL") and i.endswith("HL"):
     return ['',0,0,['']]
   elif o.endswith("HL") and i.endswith("DE"):
@@ -160,6 +172,19 @@ def getglue(o,i):
     return ['ld c,'+o.lower()+" \ ld b,0",3,11,['BC']]
   elif o in reg8 and i.endswith("IX"):
     return ['ld ixl,'+o.lower()+" \ ld ixh,0",3,11,['IX']]
+
+  elif o.endswith("HL") and i in reg8:
+    return ['ld '+i.lower()+',l',1,4,[s]]
+  elif o.endswith("DE") and i in reg8:
+    return ['ld '+i.lower()+',e',1,4,[s]]
+  elif o.endswith("BC") and i in reg8:
+    return ['ld '+i.lower()+',c',1,4,[s]]
+  elif o.endswith("IX") and i in reg8:
+    return ['ld '+i.lower()+',ixl',2,8,[s]]
+
+
+  elif o in reg8 and i in reg8:
+    return ['ld '+i.lower()+','+o.lower(),1,4,[s]]
 
   else:
     raise Exception("""Can't glue "%s ==> %s" """%(o,i))
@@ -341,11 +366,22 @@ def compile(src,c):
   #  p.code[0].code+="\n"+i
   return p
 
+conn=sqlite3.connect("tokens.db")
+c=conn.cursor()
+p=c.execute("SELECT name,numargs,precedence,type FROM tokens").fetchall()
+conn.close()
+tokens=[]
+for i in p:
+  i=list(i)
+  if i[3]=="func":
+    i[0]+="("
+  tokens+=[list(i)]
 def numargs(s):
-  if s in ["+","-","*","/","^","<<","\\~","GotoIf(","=","!="]:
-    return 2
-  if s in ["++","--"] or s.endswith("("):
-    return 1
+  k=0
+  while k<len(tokens):
+    if s==tokens[k][0]:
+      return tokens[k][1]
+    k+=1
   return 0
 def iscommutative(s):
   return s in ['+','*','min(','max(',"=","!="]
@@ -357,7 +393,7 @@ def astgen(l):
     return [n,l]
   while k>0:
     c=astgen(l)
-    n.addchild(c[0])
+    n.addchild(c[0].copy())
     l=c[1]
     k-=1
   return [n,l]
@@ -714,7 +750,7 @@ mode=''
 TI8X=False
 SCRAP="8000h"
 SCRAP_SIZE=256
-includes=["jq"]
+includes=["z80comp"]
 if len(sys.argv)==1:
   print("""
   %s [flags] source [dest]
@@ -767,23 +803,24 @@ for i in code.split("\n"):
     src+="\n"+i
   else:
     s=i.strip().split('\t')
-    ast=astgen(s)[0]
-    s=""
-    while s!=asttorpn(ast):
+    if s!=['']:
+      ast=astgen(s)[0]
+      s=""
+      while s!=asttorpn(ast):
+        s=asttorpn(ast)
+        ast=astoptimize(ast)
+        ast=astoptimize2(ast)
+      #ast=astcompile(ast)
       s=asttorpn(ast)
-      ast=astoptimize(ast)
-      ast=astoptimize2(ast)
-    #ast=astcompile(ast)
-    s=asttorpn(ast)
-    p=compile(s,c)
-    for i in p.vars:
-      if i not in vars:
-        vars+=[i]
-    for i in p.requires:
-      if i not in incs:
-        incs+=[i]
+      p=compile(s,c)
+      for i in p.vars:
+        if i not in vars:
+          vars+=[i]
+      for i in p.requires:
+        if i not in incs:
+          incs+=[i]
 
-    src+="\n "+p.code[0].code
+      src+="\n "+p.code[0].code
 src+=" \ ret"
 for i in incs:
   src+='\n'+i
@@ -798,7 +835,7 @@ t=''
 for i in includes:
   if i!='':
     t+='#include "'+i.lower()+'.inc"\n'
-    if i.lower() not in ["ti83plus","jq"]:
+    if i.lower() not in ["ti83plus","z80comp"]:
       t+='#include "'+i.lower()+'_z80comp.inc"\n'
 
 #Create equates for the var locations
