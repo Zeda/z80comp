@@ -1,0 +1,7 @@
+#ifndef included_disp_uint16
+#define included_disp_uint16
+disp_uint16:
+  bcall(_DispHL)
+  bcall(_newline)
+  ret
+#endif

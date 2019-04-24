@@ -1,0 +1,13 @@
+4	k	\~
+0	x	\~
+1	y	\~
+lbl0:
+x	y	+	z	\~
+x	1	+	x	\~
+y	1	+	y	\~
+10	z	*	Disp(
+k	1	-	k	\~
+lbl0	k	0	!=	GotoIf(
+2	x	\~
+x	Disp(
+

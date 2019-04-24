@@ -1,0 +1,12 @@
+4->k
+0->x
+1->y
+lbl0:
+  x+y->z
+  x+1->x
+  y+1->y
+  Disp(10*z)
+  k-1->k
+  GotoIf(lbl0,k!=0)
+2->x
+Disp(x)
