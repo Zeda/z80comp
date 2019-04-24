@@ -1,0 +1,33 @@
+#ifndef included_UpdateLCD
+#define included_UpdateLCD
+#include "gfx.inc"
+#include "pushpop.z80"
+UpdateLCD:
+  call pushpop
+  ld hl,(gbuf_ptr)
+  LCDDelay()
+  ld a,$80
+  out (16),a
+
+  ld de,11
+  LCDDelay()
+  ld a,$20
+col:
+  out (10h),a
+  push af
+  ld bc,$4011
+row:
+  LCDDelay()
+  outi
+  add hl,de
+  jr nz,row
+  pop af
+  inc a
+  dec h
+  dec h
+  dec h
+  inc hl
+  cp $2c
+  jp nz,col
+  ret
+#endif
