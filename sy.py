@@ -94,7 +94,7 @@ def shuntingyard(inp):
     if inp[k]==".":
       out+=inp[k]
       k+=1
-      while ("0"<inp[k]<="9"):
+      while ("0"<=inp[k]<="9"):
         out+=inp[k]
         k+=1
       if inp[k]==".":
@@ -157,9 +157,9 @@ def shuntingyard(inp):
       out+=opstack[0:m]
       opstack=n[0]+","+opstack[m:-1]
       k+=1
-    if ("A"<inp[k]<="Z") or ("a"<inp[k]<="z"):
+    if ("A"<=inp[k]<="Z") or ("a"<=inp[k]<="z"):
       n=k
-      while (("A"<inp[k]<="Z") or ("a"<inp[k]<="z") or ("0"<inp[k]<="1") or (inp[k]=="_")) and k<size:
+      while (("A"<=inp[k]<="Z") or ("a"<=inp[k]<="z") or ("0"<=inp[k]<="9") or (inp[k]=="_")) and k<size:
         k+=1
       if inp[k]=="(":
         k+=1
