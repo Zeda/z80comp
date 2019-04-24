@@ -2,7 +2,7 @@
 
 #Clean up existing files
 rm test.ir
-rm test.asm
+#rm test.asm
 
 # test.txt is our source.
 # Convert to an IR code
