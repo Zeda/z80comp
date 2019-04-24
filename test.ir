@@ -1,13 +1,34 @@
-4	k	\~
+GetGBuf(	SetGBuf(
+617	k	\~
 0	x	\~
-1	y	\~
+0	y	\~
+1	s	\~
+1	t	\~
 lbl0:
-x	y	+	z	\~
-x	1	+	x	\~
-y	1	+	y	\~
-10	z	*	Disp(
+x	y	0	0	Sprite8(
+UpdateLCD(
+x	s	+	x	\~
+y	t	+	y	\~
+lbl1	x	88	-	GotoIf(
+0	s	-	s	\~
+lbl1:
+lbl2	x	0	!=	GotoIf(
+0	s	-	s	\~
+lbl2:
+lbl3	y	56	-	GotoIf(
+0	t	-	t	\~
+lbl3:
+lbl4	y	0	!=	GotoIf(
+0	t	-	t	\~
+lbl4:
 k	1	-	k	\~
 lbl0	k	0	!=	GotoIf(
-2	x	\~
-x	Disp(
+
+stop	0	0	=	GotoIf(
+
+
+
+
+
+stop:
 
