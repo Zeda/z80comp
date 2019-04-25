@@ -1,4 +1,7 @@
-import sys,sqlite3
+import sys
+import sqlite3
+import caribou
+
 from z80opt import z80optimizer
 #  These two help decide worthy tradeoffs in optimization
 #SPEED_MOD=0.0 would mean that only size matters in optimization
@@ -366,9 +369,10 @@ def compile(src,c):
   #  p.code[0].code+="\n"+i
   return p
 
-conn=sqlite3.connect("tokens.db")
-c=conn.cursor()
-p=c.execute("SELECT name,numargs,precedence,type FROM tokens").fetchall()
+caribou.upgrade('./z80comp.db', 'migrations')
+conn = sqlite3.connect("z80comp.db")
+c = conn.cursor()
+p = c.execute("SELECT name,numargs,precedence,type FROM tokens").fetchall()
 conn.close()
 tokens=[]
 for i in p:
@@ -792,7 +796,7 @@ f.close()
 
 
 # Load the description database
-conn=sqlite3.connect('irToZ80.db')
+conn=sqlite3.connect('z80comp.db')
 c=conn.cursor()
 src=''
 vars=[]
