@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Clean up existing files
-rm test.ir
+rm test.rpn
 #rm test.asm
 
 # test.txt is our source.
