@@ -3,3 +3,5 @@
 /screenshot
 *.zip
 *.pyc
+*.db
+bin/

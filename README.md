@@ -1,10 +1,10 @@
 # z80comp
 (This is still a work-in-progress!)
 
-This project is on [**GitHub**](https://github.com/Zeda/z80comp) if you wan to contribute or report issues!
+This project is on [**GitHub**](https://github.com/Zeda/z80comp) if you want to contribute or report issues!
 
 ## Goal
-The goal of this project is to compile higher-level code to decent Z80 assembly. At the time of this writing, it is producing decent assembly, but at least it is producing working assembly!
+The goal of this project is to compile higher-level code to decent Z80 assembly. At the time of this writing, it isn't producing decent assembly, but at least it is producing working assembly!
 
 ## Getting Started
 First, download the files! An example input is in [`test.txt`](test.txt)

@@ -1,18 +1,12 @@
+import sqlite3
+import caribou
+import sys
+
 from math import sin
-import sys,sqlite3,os
-conn=sqlite3.connect("tokens.db")
+
+caribou.upgrade('./z80comp.db', 'migrations')
+conn=sqlite3.connect("z80comp.db")
 c=conn.cursor()
-c.execute("""
-CREATE TABLE IF NOT EXISTS `tokens` (
-  `name`  TEXT NOT NULL,
-  `code`  TEXT NOT NULL,
-  `bytecode`  TEXT NOT NULL,
-  `sizescore`  INTEGER NOT NULL,
-  `speedscore`  INTEGER NOT NULL,
-  `type`  TEXT NOT NULL,
-  `precedence`  INTEGER NOT NULL
-)
-""")
 binops=c.execute("SELECT `name`,`precedence`,`code`,`bytecode` FROM tokens WHERE type='binop'").fetchall()+[['',0,'']]
 varlist=[]
 funclist=[]
