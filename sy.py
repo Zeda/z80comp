@@ -235,7 +235,7 @@ if fo=='':
   fo=s[0]
   for i in s[1:-1]:
     fo+='.'+i
-  fo+='.ir'
+  fo+='.rpn'
 print("Generating intermediate code for %s" % fi)
 f=open(fi,"r")
 code=f.read()
