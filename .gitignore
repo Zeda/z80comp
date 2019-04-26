@@ -4,4 +4,6 @@
 *.zip
 *.pyc
 *.db
+*.rpn
+*.asm
 bin/

@@ -1,15 +1,15 @@
 #!/bin/bash
 
 #Clean up existing files
-rm test.ir
-#rm test.asm
+rm sample/test.rpn
+#rm sample/test.asm
 
 # test.txt is our source.
 # Convert to an IR code
-python sy.py test.txt
+python sy.py sample/test.txt
 
 #Convert the RPN-like code to Z80 assembly
-python compile.py -TI8X -MAX_PATHS=150 test.ir
+python compile.py -TI8X -MAX_PATHS=150 sample/test.rpn
 
 #Compile
-spasm test.asm bin/test.8xp -I inc -I routines
+spasm sample/test.asm bin/test.8xp -I inc -I routines
