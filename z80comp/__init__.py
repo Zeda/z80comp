@@ -33,6 +33,7 @@ def z80optimizer(src):
 
     return ret
 
+
 def isnum(s):
     for i in s:
         if (i < "0" or i > "9") and i != "." and i != '-':

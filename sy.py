@@ -9,26 +9,26 @@ caribou.upgrade('./z80comp.db', 'migrations')
 conn = sqlite3.connect("z80comp.db")
 c = conn.cursor()
 binops = c.execute("""
-    SELECT
-        `name`,
-        `precedence`,
-        `code`,
-        `bytecode`
-    FROM tokens
-    WHERE type = 'binop'
+        SELECT
+                `name`,
+                `precedence`,
+                `code`,
+                `bytecode`
+        FROM tokens
+        WHERE type = 'binop'
 """).fetchall() + [['', 0, '']]
 varlist = []
 funclist = []
 labels = []
 org = 0
 for i in c.execute("""
-    SELECT
-        `name`,
-        `code`,
-        `bytecode`
-    FROM tokens
-    WHERE type = 'func'
-    ORDER BY `name` ASC
+        SELECT
+                `name`,
+                `code`,
+                `bytecode`
+        FROM tokens
+        WHERE type = 'func'
+        ORDER BY `name` ASC
 """).fetchall():
     funclist += [list(i)]
 
@@ -202,7 +202,7 @@ def shuntingyard(inp):
         if ("A" <= inp[k] <= "Z") or ("a" <= inp[k] <= "z"):
             n = k
             while (("A" <= inp[k] <= "Z") or ("a" <= inp[k] <= "z") or
-                    ("0" <= inp[k] <= "9") or (inp[k] == "_")) and k < size:
+                   ("0" <= inp[k] <= "9") or (inp[k] == "_")) and k < size:
                 k += 1
 
             if inp[k] == "(":
