@@ -290,7 +290,6 @@ def compile(src, c):
     # Each element of the code path is [outputs, destroys, code]
 
     paths = [Path()]
-    path = paths[0]
     count = 0
     while paths[0].index < len(src):
         pth = paths[0].copy()
@@ -445,7 +444,7 @@ def compile(src, c):
                     cod.out = []
                     cod.destroys = []
                     if cod.destroys != []:
-                        print cod.destroys
+                        print(cod.destroys)
                         raw_input('Halp!')
                     for ins in i[3].split(','):
                         inp = ins.strip().split('=')
@@ -582,7 +581,7 @@ def compile(src, c):
             paths = sorted(paths)
             count += 1
 
-    print '%d paths searched' % count
+    print('%d paths searched' % count)
     p = paths[0]
     for i in p.code[1:]:
         p.code[0].code += i.code
@@ -631,19 +630,14 @@ def astgen(l):
     l = l[0: - 1]
     if len(l) == 0 or k == 0:
         return [n, l]
+
     while k > 0:
         c = astgen(l)
         n.addchild(c[0].copy())
         l = c[1]
         k -= 1
+
     return [n, l]
-
-
-def isnum(s):
-    f = True
-    for i in s:
-        f &= ('0' <= i <= '9') | (i == '.') | (i == '-')
-    return f
 
 
 def astoptimize(n):
@@ -1011,10 +1005,6 @@ def astcompile(n, outp=''):
                 raise Exception(n)
 
     p = p[0]
-
-    # print(n.value,outp,p)
-    # p=c.execute("SELECT code,input,output,destroys FROM z80 WHERE ir=? ORDER BY size*size*36+speed*speed ASC",(n.value,)).fetchone()   #In the future choose fetchall() and try all of the paths.
-
     n.destroys = []
     k = 0
     ins = p[1].split(',')
@@ -1162,15 +1152,14 @@ SCRAP = '8000h'
 SCRAP_SIZE = 256
 includes = ['z80comp']
 if len(sys.argv) == 1:
-    print """
-    %s [flags] source [dest]
+    print(""")
+    {} [flags] source [dest]
         -TI8X will include headers for the TI-83+/84+ calculators
         -TI8X-<<shell>> will include the headers for the designated shell
         -SCRAP=xxxx will set the location of scrap
         -SCRAP_SIZE=x will set the size of scrap
-    """ \
-        % sys.argv[0]
-    raise SystemExit
+    """.format(sys.argv[0]))
+    raise SystemExit()
 
 for i in sys.argv[1:]:
     if i[0] == '-':
@@ -1206,7 +1195,7 @@ if fo == '':
 
     fo += '.asm'
 
-print 'Generating Z80 code from %s' % fi
+print('Generating Z80 code from {}'.format(fi))
 with open(fi, 'r') as f:
     code = f.read().strip()
 
@@ -1266,7 +1255,6 @@ for i in includes:
             t += '#include "' + i.lower() + '_z80comp.inc"\n'
 
 # Create equates for the var locations
-
 if 2 * len(vars) > SCRAP_SIZE:
     raise Exception(
         'SCRAP not big enough! Need {} bytes.'.format(2 * len(vars))
@@ -1282,9 +1270,7 @@ if len(vars) != 0:
         t += i + '\n'
 
 if TI8X:
-    t += '''.db $BB,$6D
-.org $9D95
-'''
+    t += '.db $BB,$6D\n.org $9D95'
 
 # Add the header
 s = t + s
@@ -1295,4 +1281,4 @@ conn.close()
 with open(fo, 'w') as f:
     f.write(s)
 
-print 'Output Z80 code to %s' % fo
+print('Output Z80 code to {}'.format(fo))
