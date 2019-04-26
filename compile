@@ -7,13 +7,18 @@ fi
 if [ -f sample/test.asm ];then
 	rm sample/test.asm
 fi
+if [[ "$(command -v python3)" != "" ]];then
+	python="python3"
+else
+	python="python"
+fi
 
 # test.txt is our source.
 # Convert to an IR code
-python sy.py sample/test.txt sample/test.rpn
+$python sy.py sample/test.txt sample/test.rpn
 
 #Convert the RPN-like code to Z80 assembly
-python compile.py -TI8X -MAX_PATHS=150 sample/test.rpn
+$python compile.py -TI8X -MAX_PATHS=150 sample/test.rpn
 
 #Compile
 spasm sample/test.asm sample/test.8xp -I inc -I routines
