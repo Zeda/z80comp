@@ -3,6 +3,7 @@ import caribou
 import sys
 
 from math import sin
+from z80comp import isnum
 
 caribou.upgrade('./z80comp.db', 'migrations')
 conn = sqlite3.connect("z80comp.db")
@@ -47,14 +48,6 @@ def isvar(s):
             return True
 
     return False
-
-
-def isnum(s):
-    for i in s:
-        if (i < "0" or i > "9") and i != "." and i != '-':
-            return False
-
-    return True
 
 
 def optimizer(exp):

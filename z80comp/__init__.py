@@ -32,3 +32,10 @@ def z80optimizer(src):
             ret += "{}\n".format(line)
 
     return ret
+
+def isnum(s):
+    for i in s:
+        if (i < "0" or i > "9") and i != "." and i != '-':
+            return False
+
+    return True
