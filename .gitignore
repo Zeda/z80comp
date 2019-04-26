@@ -9,3 +9,4 @@
 *.8xp
 bin/
 dist/
+*/__pycache__/*
