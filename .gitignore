@@ -4,4 +4,9 @@
 *.zip
 *.pyc
 *.db
+*.rpn
+*.asm
+*.8xp
 bin/
+dist/
+*/__pycache__/*
