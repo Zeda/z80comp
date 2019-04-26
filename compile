@@ -16,4 +16,4 @@ python sy.py sample/test.txt sample/test.rpn
 python compile.py -TI8X -MAX_PATHS=150 sample/test.rpn
 
 #Compile
-spasm sample/test.asm bin/test.8xp -I inc -I routines
+spasm sample/test.asm sample/test.8xp -I inc -I routines

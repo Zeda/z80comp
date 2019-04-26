@@ -6,4 +6,6 @@
 *.db
 *.rpn
 *.asm
+*.8xp
 bin/
+dist/
