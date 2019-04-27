@@ -11,9 +11,7 @@ c = conn.cursor()
 binops = c.execute("""
         SELECT
                 `name`,
-                `precedence`,
-                `code`,
-                `bytecode`
+                `precedence`
         FROM tokens
         WHERE type = 'binop'
 """).fetchall() + [['', 0, '']]
@@ -23,9 +21,7 @@ labels = []
 org = 0
 for i in c.execute("""
         SELECT
-                `name`,
-                `code`,
-                `bytecode`
+                `name`
         FROM tokens
         WHERE type = 'func'
         ORDER BY `name` ASC
