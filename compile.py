@@ -1270,7 +1270,7 @@ if len(vars) != 0:
         t += i + '\n'
 
 if TI8X:
-    t += '.db $BB,$6D\n.org $9D95'
+    t += '.db $BB,$6D\n.org $9D95\n'
 
 # Add the header
 s = t + s
