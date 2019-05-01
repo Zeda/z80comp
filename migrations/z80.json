@@ -1122,10 +1122,32 @@
         "state": ""
     },
     {
+        "code": "jq(**)",
+        "destroys": "",
+        "input": "",
+        "ir": "Goto(",
+        "output": "",
+        "requires": "",
+        "size": 3,
+        "speed": 10,
+        "state": ""
+    },
+    {
         "code": "ld a,h \\ or l \\ jqnz(**)",
         "destroys": "AF,HL",
         "input": "HL=i1=uint16",
         "ir": "GotoIf(",
+        "output": "",
+        "requires": "",
+        "size": 5,
+        "speed": 18,
+        "state": ""
+    },
+    {
+        "code": "ld a,h \\ or l \\ jqz(**)",
+        "destroys": "AF,HL",
+        "input": "HL=i1=uint16",
+        "ir": "GotoIfNot(",
         "output": "",
         "requires": "",
         "size": 5,
@@ -1265,6 +1287,50 @@
         "state": ""
     },
     {
+        "code": "ld a,h \\ or l \\ jqnz(**)",
+        "destroys": "AF",
+        "input": "HL=i1=uint16",
+        "ir": "0 = GotoIfNot(",
+        "output": "",
+        "requires": "",
+        "size": 5,
+        "speed": 17.75,
+        "state": ""
+    },
+    {
+        "code": "ld a,d \\ or e \\ jqnz(**)",
+        "destroys": "AF",
+        "input": "DE=i1=uint16",
+        "ir": "0 = GotoIfNot(",
+        "output": "",
+        "requires": "",
+        "size": 5,
+        "speed": 17.75,
+        "state": ""
+    },
+    {
+        "code": "ld a,b \\ or c \\ jqnz(**)",
+        "destroys": "AF",
+        "input": "BC=i1=uint16",
+        "ir": "0 = GotoIfNot(",
+        "output": "",
+        "requires": "",
+        "size": 5,
+        "speed": 17.75,
+        "state": ""
+    },
+    {
+        "code": "ld a,ixh \\ or ixl \\ jqnz(**)",
+        "destroys": "AF",
+        "input": "IX=i1=uint16",
+        "ir": "0 = GotoIfNot(",
+        "output": "",
+        "requires": "",
+        "size": 7,
+        "speed": 25.75,
+        "state": ""
+    },
+    {
         "code": "xor a \\ sbc hl,de \\ ld h,a \\ ld l,a \\ jr z,$+3 \\ inc l",
         "destroys": "HL,AF",
         "input": "HL=i1=uint16,DE=i2=uint16",
@@ -1390,6 +1456,50 @@
         "destroys": "AF",
         "input": "IX=i1=uint16",
         "ir": "0 != GotoIf(",
+        "output": "",
+        "requires": "",
+        "size": 7,
+        "speed": 25.75,
+        "state": ""
+    },
+    {
+        "code": "ld a,h \\ or l \\ jqz(**)",
+        "destroys": "AF",
+        "input": "HL=i1=uint16",
+        "ir": "0 != GotoIfNot(",
+        "output": "",
+        "requires": "",
+        "size": 5,
+        "speed": 17.75,
+        "state": ""
+    },
+    {
+        "code": "ld a,d \\ or e \\ jqz(**)",
+        "destroys": "AF",
+        "input": "DE=i1=uint16",
+        "ir": "0 != GotoIfNot(",
+        "output": "",
+        "requires": "",
+        "size": 5,
+        "speed": 17.75,
+        "state": ""
+    },
+    {
+        "code": "ld a,b \\ or c \\ jqz(**)",
+        "destroys": "AF",
+        "input": "BC=i1=uint16",
+        "ir": "0 != GotoIfNot(",
+        "output": "",
+        "requires": "",
+        "size": 5,
+        "speed": 17.75,
+        "state": ""
+    },
+    {
+        "code": "ld a,ixh \\ or ixl \\ jqz(**)",
+        "destroys": "AF",
+        "input": "IX=i1=uint16",
+        "ir": "0 != GotoIfNot(",
         "output": "",
         "requires": "",
         "size": 7,
