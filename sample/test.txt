@@ -4,30 +4,22 @@ SetGBuf(GetGBuf())
 0->y
 1->s
 1->t
-lbl0:
+While(k!=0)
   Sprite8(x,y,0,0)
   UpdateLCD()
   x+s->x
   y+t->y
-  GotoIf(lbl1,x-88)
-  0-s->s
-lbl1:
-  GotoIf(lbl2,x!=0)
-  0-s->s
-lbl2:
-  GotoIf(lbl3,y-56)
-  0-t->t
-lbl3:
-  GotoIf(lbl4,y!=0)
-  0-t->t
-lbl4:
+  If(x=88)
+    0-s->s
+  End
+  If(x=0)
+    0-s->s
+  End
+  If(y=56)
+    0-t->t
+  End
+  If(y=0)
+    0-t->t
+  End
   k-1->k
-  GotoIf(lbl0,k!=0)
-
-GotoIf(stop,0=0)
-
-
-
-
-
-stop:
+End
