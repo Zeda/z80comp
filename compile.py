@@ -371,7 +371,7 @@ def compile(src, c):
                         WHERE ir=?
                     """, ('GotoIf(', )).fetchall()
                     s = s[0:-7]
-            elif s.endswith('GotoNotIf('):
+            elif s.endswith('GotoIfNot('):
                 if s.startswith('0 = '):
                     p0 = c.execute("""
                         SELECT
@@ -384,7 +384,7 @@ def compile(src, c):
                             requires,
                             state
                         FROM z80 WHERE ir=?
-                    """, ('0 = GotoNotIf(', )).fetchall()
+                    """, ('0 = GotoIfNot(', )).fetchall()
                     s = s[4:-10]
                 elif s.startswith('0 != '):
                     p0 = c.execute("""
@@ -399,7 +399,7 @@ def compile(src, c):
                         state
                     FROM z80
                     WHERE ir=?
-                """, ('0 != GotoNotIf(', )).fetchall()
+                """, ('0 != GotoIfNot(', )).fetchall()
                     s = s[5:-10]
                 else:
                     p0 = c.execute("""
@@ -414,7 +414,7 @@ def compile(src, c):
                             state
                         FROM z80
                         WHERE ir=?
-                    """, ('GotoNotIf(', )).fetchall()
+                    """, ('GotoIfNot(', )).fetchall()
                     s = s[0:-10]
             elif s.endswith('Goto('):
                 p0 = c.execute("""
@@ -847,7 +847,7 @@ def astoptimize(n):
         n.children = [n.children[1]]
         return n
 
-    elif n.value == 'GotoNotIf(':
+    elif n.value == 'GotoIfNot(':
         n.value = n.child(0).value + ' ' + n.value
         n.desc = [1]
         n.children = [n.children[1]]
@@ -877,7 +877,7 @@ def astoptimize(n):
         n.children = [n.child(0).child(0)]
         return n
 
-    elif n.value.endswith('GotoNotIf(') and n.child(0).value == '0 =':
+    elif n.value.endswith('GotoIfNot(') and n.child(0).value == '0 =':
         n.value = n.child(0).value + ' ' + n.value
         n.desc = [1]
         n.children = [n.child(0).child(0)]
@@ -901,7 +901,7 @@ def astoptimize(n):
         n.children = [n.child(0).child(0)]
         return n
 
-    elif n.value.endswith('GotoNotIf(') and n.child(0).value == '0 !=':
+    elif n.value.endswith('GotoIfNot(') and n.child(0).value == '0 !=':
         n.value = n.child(0).value + ' ' + n.value
         n.desc = [1]
         n.children = [n.child(0).child(0)]
