@@ -17,8 +17,6 @@ binops = c.execute("""
 """).fetchall() + [['', 0, '']]
 varlist = []
 funclist = []
-labels = []
-org = 0
 for i in c.execute("""
         SELECT
                 `name`
@@ -214,7 +212,7 @@ def shuntingyard(inp):
 
 
 def compileline(exp):
-    global varlist, org, labels
+    global varlist
     exp = exp.strip()
     if exp == "":
         return []
@@ -259,8 +257,7 @@ def compileline(exp):
     return shuntingyard(exp)
 
 
-def compile(code, opt=True):
-    global varlist, org
+def compile(code):
     code = code.replace("\\", "\\\\")
     code = code.replace("->", "\\~")
     code = code.split("\n")
@@ -276,7 +273,6 @@ def compile(code, opt=True):
 
     return out
 
-
 fi = ''
 fo = ''
 mode = ''
@@ -286,12 +282,11 @@ if len(sys.argv) == 1:
     raise SystemExit
 
 for i in sys.argv[1:]:
-    if i[0] != '-':
-        if fi == '':
-            fi = i
+    if fi == '':
+        fi = i
 
-        else:
-            fo = i
+    else:
+        fo = i
 
 if fo == '':
     s = fi.split('.')
