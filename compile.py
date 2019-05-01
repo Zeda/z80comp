@@ -371,6 +371,65 @@ def compile(src, c):
                         WHERE ir=?
                     """, ('GotoIf(', )).fetchall()
                     s = s[0:-7]
+            elif s.endswith('GotoNotIf('):
+                if s.startswith('0 = '):
+                    p0 = c.execute("""
+                        SELECT
+                            code,
+                            size,
+                            speed,
+                            input,
+                            output,
+                            destroys,
+                            requires,
+                            state
+                        FROM z80 WHERE ir=?
+                    """, ('0 = GotoNotIf(', )).fetchall()
+                    s = s[4:-10]
+                elif s.startswith('0 != '):
+                    p0 = c.execute("""
+                    SELECT
+                        code,
+                        size,
+                        speed,
+                        input,
+                        output,
+                        destroys,
+                        requires,
+                        state
+                    FROM z80
+                    WHERE ir=?
+                """, ('0 != GotoNotIf(', )).fetchall()
+                    s = s[5:-10]
+                else:
+                    p0 = c.execute("""
+                        SELECT
+                            code,
+                            size,
+                            speed,
+                            input,
+                            output,
+                            destroys,
+                            requires,
+                            state
+                        FROM z80
+                        WHERE ir=?
+                    """, ('GotoNotIf(', )).fetchall()
+                    s = s[0:-10]
+            elif s.endswith('Goto('):
+                p0 = c.execute("""
+                    SELECT
+                        code,
+                        size,
+                        speed,
+                        input,
+                        output,
+                        destroys,
+                        requires,
+                        state
+                    FROM z80 WHERE ir=?
+                """, ('Goto(', )).fetchall()
+                s = s[0:-5]
             elif isnum(src[pth.index]):
                 p0 = c.execute("""
                 SELECT
@@ -383,8 +442,8 @@ def compile(src, c):
                     requires,
                     state
                 FROM z80
-                WHERE ir=?
-            """, ('\\constant', )).fetchall()
+                WHERE (ir=? AND output LIKE ?)
+            """, ('\\constant', "%%int16%%",)).fetchall()
             else:
                 p0 = c.execute("""
                     SELECT
@@ -580,8 +639,9 @@ def compile(src, c):
             PATH_SORT_MODE = PATH_SORT_MODE_SCORE
             paths = sorted(paths)
             count += 1
+    if v:
+        print('%d paths searched' % count)
 
-    print('%d paths searched' % count)
     p = paths[0]
     for i in p.code[1:]:
         p.code[0].code += i.code
@@ -787,6 +847,18 @@ def astoptimize(n):
         n.children = [n.children[1]]
         return n
 
+    elif n.value == 'GotoNotIf(':
+        n.value = n.child(0).value + ' ' + n.value
+        n.desc = [1]
+        n.children = [n.children[1]]
+        return n
+
+    elif n.value == 'Goto(':
+        n.value = n.child(0).value + ' ' + n.value
+        n.desc = [0]
+        n.children = []
+        return n
+
     elif n.value == '=' and n.child(1).value == '0':
         n.value = '0 ='
         n.children = [n.child(0)]
@@ -805,6 +877,12 @@ def astoptimize(n):
         n.children = [n.child(0).child(0)]
         return n
 
+    elif n.value.endswith('GotoNotIf(') and n.child(0).value == '0 =':
+        n.value = n.child(0).value + ' ' + n.value
+        n.desc = [1]
+        n.children = [n.child(0).child(0)]
+        return n
+
     elif n.value == '!=' and n.child(1).value == '0':
         n.value = '0 !='
         n.children = [n.child(0)]
@@ -818,6 +896,12 @@ def astoptimize(n):
         return n
 
     elif n.value.endswith('GotoIf(') and n.child(0).value == '0 !=':
+        n.value = n.child(0).value + ' ' + n.value
+        n.desc = [1]
+        n.children = [n.child(0).child(0)]
+        return n
+
+    elif n.value.endswith('GotoNotIf(') and n.child(0).value == '0 !=':
         n.value = n.child(0).value + ' ' + n.value
         n.desc = [1]
         n.children = [n.child(0).child(0)]
@@ -1151,6 +1235,7 @@ TI8X = False
 SCRAP = '8000h'
 SCRAP_SIZE = 256
 includes = ['z80comp']
+v=False
 if len(sys.argv) == 1:
     print(""")
     {} [flags] source [dest]
@@ -1158,6 +1243,7 @@ if len(sys.argv) == 1:
         -TI8X-<<shell>> will include the headers for the designated shell
         -SCRAP=xxxx will set the location of scrap
         -SCRAP_SIZE=x will set the size of scrap
+        -v    for verbose mode
     """.format(sys.argv[0]))
     raise SystemExit()
 
@@ -1179,13 +1265,15 @@ for i in sys.argv[1:]:
 
         elif i.startswith('-MAX_PATHS='):
             MAX_PATHS = int(i[11:])
+        elif i.startswith('-MAX_PATHS='):
+            MAX_PATHS = int(i[11:])
+        elif i=="-v":
+          v=True
 
+    elif fi == '':
+        fi = i
     else:
-        if fi == '':
-            fi = i
-
-        else:
-            fo = i
+        fo = i
 
 if fo == '':
     s = fi.split('.')
@@ -1195,7 +1283,9 @@ if fo == '':
 
     fo += '.asm'
 
-print('Generating Z80 code from {}'.format(fi))
+if v:
+    print('Generating Z80 code from {}'.format(fi))
+
 with open(fi, 'r') as f:
     code = f.read().strip()
 
@@ -1281,4 +1371,5 @@ conn.close()
 with open(fo, 'w') as f:
     f.write(s)
 
-print('Output Z80 code to {}'.format(fo))
+if v:
+    print('Output Z80 code to {}'.format(fo))
