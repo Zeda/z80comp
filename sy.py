@@ -277,12 +277,15 @@ fi = ''
 fo = ''
 mode = ''
 asm = False
+v=False
 if len(sys.argv) == 1:
     print("{} source [dest]".format(sys.argv[0]))
     raise SystemExit
 
 for i in sys.argv[1:]:
-    if fi == '':
+    if i=="-v":
+      v=True
+    elif fi == '':
         fi = i
 
     else:
@@ -296,7 +299,9 @@ if fo == '':
 
     fo += '.ir'
 
-print("Generating intermediate code for {}".format(fi))
+if v:
+    print("Generating intermediate code for {}".format(fi))
+
 with open(fi, "r") as f:
     code = f.read()
 
@@ -309,4 +314,5 @@ with open(fo, 'w') as f:
         f.write('\t'.join(s))
         f.write("\n")
 
-print("Output intermediate code to {}".format(fo))
+if v:
+  print("Output intermediate code to {}".format(fo))
