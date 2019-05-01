@@ -804,6 +804,12 @@ def astoptimize(n):
     elif n.value == '-' and n.child(1).value == '0':
         return n.child(0)
 
+    elif n.value == '-' and n.child(0).value == '0':
+        n.value='\\-'
+        n.desc=[0]
+        n.children=[n.child(1)]
+        return n
+
     elif n.value == '-' and n.child(1).value == '1':
         n.children = [n.children[0]]
         n.value = '--'

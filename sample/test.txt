@@ -1,10 +1,9 @@
 SetGBuf(GetGBuf())
-617->k
 0->x
 0->y
 1->s
 1->t
-While(k!=0)
+While(getKey()!=15)
   Sprite8(x,y,0,0)
   UpdateLCD()
   x+s->x
@@ -21,5 +20,4 @@ While(k!=0)
   If(y=0)
     0-t->t
   End
-  k-1->k
 End

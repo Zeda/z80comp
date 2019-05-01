@@ -1,0 +1,7 @@
+# Here we describe the tokens used!
+#First we define auto-replacements
+
+# Comments start with #, though \# will be interpreted as a literal #
+# We need a name, type, precedence, and number of arguments
+# We'll keep these comma separated
+\~,rassign,1,1    #Right-assignment

@@ -1578,7 +1578,7 @@
         "input": "",
         "ir": "GetGBuf(",
         "output": "HL=o1=uint16",
-        "requires": "",
+        "requires": "#include \"gfx.inc\"",
         "size": 3,
         "speed": 10,
         "state": ""
@@ -1589,9 +1589,64 @@
         "input": "HL=i1=uint16",
         "ir": "SetGBuf(",
         "output": "",
-        "requires": "",
+        "requires": "#include \"gfx.inc\"",
         "size": 3,
         "speed": 10,
+        "state": ""
+    },
+    {
+        "code": "xor a \\ sub l \\ ld l,a \\ sbc a,a \\ sub h \\ ld h,a",
+        "destroys": "HL,AF",
+        "input": "HL=i1=uint16",
+        "ir": "\\-",
+        "output": "HL=o1=uint16",
+        "requires": "",
+        "size": 6,
+        "speed": 24,
+        "state": ""
+    },
+    {
+        "code": "xor a \\ sub e \\ ld e,a \\ sbc a,a \\ sub d \\ ld d,a",
+        "destroys": "DE,AF",
+        "input": "DE=i1=uint16",
+        "ir": "\\-",
+        "output": "DE=o1=uint16",
+        "requires": "",
+        "size": 6,
+        "speed": 24,
+        "state": ""
+    },
+    {
+        "code": "xor a \\ sub c \\ ld c,a \\ sbc a,a \\ sub b \\ ld b,a",
+        "destroys": "BC,AF",
+        "input": "BC=i1=uint16",
+        "ir": "\\-",
+        "output": "BC=o1=uint16",
+        "requires": "",
+        "size": 6,
+        "speed": 24,
+        "state": ""
+    },
+    {
+        "code": "xor a \\ sub ixl \\ ld ixl,a \\ sbc a,a \\ sub ixh \\ ld ixh,a",
+        "destroys": "IX,AF",
+        "input": "IX=i1=uint16",
+        "ir": "\\-",
+        "output": "IX=o1=uint16",
+        "requires": "",
+        "size": 10,
+        "speed": 40,
+        "state": ""
+    },
+    {
+        "code": "call getKey",
+        "destroys": "AF",
+        "input": "",
+        "ir": "getKey(",
+        "output": "A=o1=uint8",
+        "requires": "#include \"getKey.z80\"",
+        "size": 3,
+        "speed": 17,
         "state": ""
     }
 ]
