@@ -14,8 +14,11 @@ else
 fi
 
 # test.txt is our source.
+# Preprocess
+$python preprocess.py sample/test.txt sample/test.rpn
+
 # Convert to an IR code
-$python sy.py sample/test.txt sample/test.rpn
+$python sy.py sample/test.rpn sample/test.rpn
 
 #Convert the RPN-like code to Z80 assembly
 $python compile.py -TI8X -MAX_PATHS=150 sample/test.rpn
